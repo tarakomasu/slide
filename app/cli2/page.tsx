@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
-import type { PDFDocumentProxy, PDFPageProxy, PDFRenderTask } from 'pdfjs-dist';
+import type { PDFDocumentProxy, PDFPageProxy, RenderTask } from 'pdfjs-dist';
 
 // Set worker source once
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
@@ -14,7 +14,7 @@ export default function PdfViewerPage() {
   const [numPages, setNumPages] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const renderTaskRef = useRef<PDFRenderTask | null>(null);
+  const renderTaskRef = useRef<RenderTask | null>(null);
 
   const pdfUrl = '/slide-demo.pdf';
 
