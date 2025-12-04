@@ -33,12 +33,29 @@ export default function PdfViewerPage() {
       if (!context) return;
       
       const containerWidth = canvas.parentElement?.clientWidth || 800;
-      const viewport = page.getViewport({ scale: 1.5 });
-      const scale = containerWidth / viewport.width;
-      const scaledViewport = page.getViewport({ scale });
+      const viewport = page.getViewport({ scale: 1.0 }); // Get viewport at default scale
 
-      canvas.height = scaledViewport.height;
-      canvas.width = scaledViewport.width;
+      const scale = containerWidth / viewport.width;
+      const displaySize = {
+        width: Math.floor(viewport.width * scale),
+        height: Math.floor(viewport.height * scale),
+      };
+
+      // Get the device pixel ratio to render at high resolution
+      const devicePixelRatio = window.devicePixelRatio || 1;
+
+      // Adjust canvas size for high-DPI screens
+      canvas.width = displaySize.width * devicePixelRatio;
+      canvas.height = displaySize.height * devicePixelRatio;
+
+      // Adjust canvas style to fit the container
+      canvas.style.width = `${displaySize.width}px`;
+      canvas.style.height = `${displaySize.height}px`;
+
+      // Scale the canvas context to match the high-DPI rendering
+      context.scale(devicePixelRatio, devicePixelRatio);
+      
+      const scaledViewport = page.getViewport({ scale: scale });
 
       const renderContext = {
         canvasContext: context,
